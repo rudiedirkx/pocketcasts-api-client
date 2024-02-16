@@ -1,0 +1,7 @@
+/vendor/
+/composer.lock
+/project.txt
+/tests/env.php
+/tests/pc-token.php
+/tests/.pcRefreshToken
+/tests/.pcAccessToken
