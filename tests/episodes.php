@@ -4,17 +4,14 @@ require __DIR__ . '/inc.bootstrap.php';
 
 $client->logIn();
 
-$uuid = $_GET['podcast'] ?? null;
+$uuid = $_GET['podcast'] ?? $_SERVER['argv'][1] ?? null;
 if (!$uuid) {
 	echo '{}';
 	exit;
 }
 
-// $client->getPodcasts();
-
 $episodes = $client->getEpisodes($uuid);
-// var_dump(count($episodes));
-// print_r($episodes);
+// $listened = array_values(array_filter($episodes, fn($x) => isset($x['bookmark'])));
 
 echo json_encode([
 	'found' => count($episodes),
