@@ -13,6 +13,7 @@ class Client {
 	public float $getPodcastsTime = 0;
 	public float $getEpisodesBookmarksTime = 0;
 	public float $getEpisodesEpisodesTime = 0;
+	public float $getEpisodesDurationsTime = 0;
 
 	public function __construct(
 		protected Auth $auth,
@@ -78,6 +79,18 @@ class Client {
 		foreach ($bookmarks['episodes'] as $bookmark) {
 			if (isset($merged[ $bookmark['uuid'] ])) {
 				$merged[ $bookmark['uuid'] ]['bookmark'] = $bookmark;
+			}
+		}
+
+		$withDurations = true;
+		if ($withDurations) {
+			$t = microtime(1);
+			$json = `curl -s 'https://podcast-api.pocketcasts.com/podcast/full/$podcastUuid' --location -H 'authority: podcast-api.pocketcasts.com' -H 'accept: */*' -H 'accept-language: en-CA,en;q=0.9' -H 'cache-control: no-cache' -H 'origin: https://play.pocketcasts.com' -H 'pragma: no-cache' -H 'referer: https://play.pocketcasts.com/' -H 'sec-ch-ua: "Not A(Brand";v="99", "Google Chrome";v="121", "Chromium";v="121"' -H 'sec-ch-ua-mobile: ?0' -H 'sec-ch-ua-platform: "Windows"' -H 'sec-fetch-dest: empty' -H 'sec-fetch-mode: cors' -H 'sec-fetch-site: same-site' -H 'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36' --compressed`;
+			$episodesDurations = json_decode($json, true);
+			$this->getEpisodesDurationsTime = microtime(1) - $t;
+
+			foreach ($episodesDurations['podcast']['episodes'] as $episode) {
+				$merged[ $episode['uuid'] ]['episode']['duration'] = $episode['duration'] ?? 0;
 			}
 		}
 

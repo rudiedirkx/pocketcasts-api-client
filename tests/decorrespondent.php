@@ -17,6 +17,7 @@ else {
 $episodes = array_map(function(array $info) {
 	return [
 		'title' => $info['episode']['title'],
+		'duration' => $info['episode']['duration'] ?? 0,
 		'published' => date('Y-m-d', strtotime($info['episode']['published'])),
 		'show_notes' => $info['episode']['show_notes'],
 		'bookmarked' => isset($info['bookmark']),
