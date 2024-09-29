@@ -14,5 +14,8 @@
             "name": "Rudie Dirkx",
             "email": "github@hotblocks.nl"
         }
-    ]
+    ],
+    "require-dev": {
+        "symfony/var-dumper": "^6.4"
+    }
 }

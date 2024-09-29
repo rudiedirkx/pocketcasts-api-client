@@ -30,10 +30,8 @@ class Client {
 		$refreshToken = $this->auth->getRefreshToken();
 		$this->auth->rememberRefreshToken($refreshToken);
 
-		$json = `curl -s 'https://api.pocketcasts.com/user/token' -H 'authority: api.pocketcasts.com' -H 'accept: */*' -H 'accept-language: en-CA,en;q=0.9' -H 'cache-control: no-cache' -H 'content-type: application/json' -H 'origin: https://play.pocketcasts.com' -H 'pragma: no-cache' -H 'referer: https://play.pocketcasts.com/' -H 'sec-ch-ua: "Not A(Brand";v="99", "Google Chrome";v="121", "Chromium";v="121"' -H 'sec-ch-ua-mobile: ?0' -H 'sec-ch-ua-platform: "Windows"' -H 'sec-fetch-dest: empty' -H 'sec-fetch-mode: cors' -H 'sec-fetch-site: same-site' -H 'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36' --data-raw '{"grantType":"refresh_token","refreshToken":"$refreshToken"}' --compressed`;
-// echo $json;
+		$json = `curl -s 'https://api.pocketcasts.com/user/token' -H 'authority: api.pocketcasts.com' -H 'accept: */*' -H 'accept-language: en-CA,en;q=0.9' -H 'cache-control: no-cache' -H 'content-type: application/json' -H 'origin: https://play.pocketcasts.com' -H 'pragma: no-cache' -H 'referer: https://play.pocketcasts.com/' -H 'sec-ch-ua: "Not A(Brand";v="99", "Google Chrome";v="121", "Chromium";v="121"' -H 'sec-ch-ua-mobile: ?0' -H 'sec-ch-ua-platform: "Windows"' -H 'sec-fetch-dest: empty' -H 'sec-fetch-mode: cors' -H 'sec-fetch-site: same-site' -H 'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36' --data-raw "{\"grantType\":\"refresh_token\",\"refreshToken\":\"$refreshToken\"}"`;
 		$data = json_decode($json, true);
-// print_r($data);
 
 		if (isset($data['accessToken'])) {
 			$this->accessToken = $data['accessToken'];
@@ -63,12 +61,12 @@ class Client {
 		$accessToken = $this->accessToken;
 
 		$t = microtime(1);
-		$json = `curl -s 'https://api.pocketcasts.com/user/podcast/episodes/bookmarks' -H 'authority: api.pocketcasts.com' -H 'accept: */*' -H 'accept-language: en-CA,en;q=0.9' -H 'authorization: Bearer $accessToken' -H 'cache-control: no-cache' -H 'content-type: application/json' -H 'origin: https://play.pocketcasts.com' -H 'pragma: no-cache' -H 'referer: https://play.pocketcasts.com/' -H 'sec-ch-ua: "Not A(Brand";v="99", "Google Chrome";v="121", "Chromium";v="121"' -H 'sec-ch-ua-mobile: ?0' -H 'sec-ch-ua-platform: "Windows"' -H 'sec-fetch-dest: empty' -H 'sec-fetch-mode: cors' -H 'sec-fetch-site: same-site' -H 'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36' --data-raw '{"uuid":"$podcastUuid"}' --compressed`;
+		$json = `curl -s --location 'https://api.pocketcasts.com/user/podcast/episodes/bookmarks' -H 'accept: */*' -H 'accept-language: en-CA,en;q=0.9' -H "authorization: Bearer $accessToken" -H 'cache-control: no-cache' -H 'content-type: application/json' -H 'origin: https://play.pocketcasts.com' -H 'pragma: no-cache' -H 'priority: u=1, i' -H 'referer: https://play.pocketcasts.com/' -H 'sec-ch-ua: "Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"' -H 'sec-ch-ua-mobile: ?0' -H 'sec-ch-ua-platform: "Windows"' -H 'sec-fetch-dest: empty' -H 'sec-fetch-mode: cors' -H 'sec-fetch-site: same-site' -H 'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36' --data-raw "{\"uuid\":\"$podcastUuid\"}"`;
 		$bookmarks = json_decode($json, true);
 		$this->getEpisodesBookmarksTime = microtime(1) - $t;
 
 		$t = microtime(1);
-		$json = `curl -s 'https://podcast-api.pocketcasts.com/mobile/show_notes/full/$podcastUuid' --location -H 'authority: podcast-api.pocketcasts.com' -H 'accept: */*' -H 'accept-language: en-CA,en;q=0.9' -H 'cache-control: no-cache' -H 'origin: https://play.pocketcasts.com' -H 'pragma: no-cache' -H 'referer: https://play.pocketcasts.com/' -H 'sec-ch-ua: "Not A(Brand";v="99", "Google Chrome";v="121", "Chromium";v="121"' -H 'sec-ch-ua-mobile: ?0' -H 'sec-ch-ua-platform: "Windows"' -H 'sec-fetch-dest: empty' -H 'sec-fetch-mode: cors' -H 'sec-fetch-site: same-site' -H 'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36' --compressed`;
+		$json = `curl -s --location 'https://podcast-api.pocketcasts.com/mobile/show_notes/full/$podcastUuid' -H 'accept: */*' -H 'accept-language: en-CA,en;q=0.9' -H 'cache-control: no-cache' -H 'origin: https://play.pocketcasts.com' -H 'pragma: no-cache' -H 'priority: u=1, i' -H 'referer: https://play.pocketcasts.com/' -H 'sec-ch-ua: "Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"' -H 'sec-ch-ua-mobile: ?0' -H 'sec-ch-ua-platform: "Windows"' -H 'sec-fetch-dest: empty' -H 'sec-fetch-mode: cors' -H 'sec-fetch-site: same-site' -H 'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36'`;
 		$episodes = json_decode($json, true);
 		$this->getEpisodesEpisodesTime = microtime(1) - $t;
 

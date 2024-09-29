@@ -2,6 +2,8 @@
 
 require __DIR__ . '/inc.bootstrap.php';
 
+header('Content-type: text/html; charset=utf-8');
+
 $client->logIn();
 
 $dcFile = __DIR__ . '/.decorrespondent';
@@ -24,6 +26,7 @@ $episodes = array_map(function(array $info) {
 	];
 }, $episodes);
 
+header('Content-type: application/json; charset=utf-8');
 echo json_encode([
 	'episodes' => $episodes,
 	'debug' => [
